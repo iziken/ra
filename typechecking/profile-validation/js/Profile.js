@@ -27,3 +27,34 @@ const Profile = props => {
     </div>
   );
 };
+
+Profile.propTypes = {
+  first_name: PropTypes.string,
+  last_name: PropTypes.string,
+  img: PropTypes.string,
+  url: (props, propName, componentName) => {
+    const value = props[propName];
+
+    if (!(/https\:\/\/vk\.com\/id[0-9]+|[A-Za-z0-9_-]+/).test(value)) {
+      throw new Error(`Invalid prop ${propName} supplied to ${componentName}. Expecting something like 'https://vk.com/id13' or 'https://vk.com/nickname'. Validation failed.`);
+    }
+  },
+  birthday: (props, propName, componentName) => {
+    const birthday = props[propName];
+    const isBirthday = (typeof birthday === 'string') &&  /^\d{4}\-\d{2}\-\d{2}$/.test(birthday);
+    const chekBirthday = new Date(birthday) > new Date();
+
+
+    if(!isBirthday) {
+      throw new Error(`Invalid prop ${propName} supplied to ${componentName}. Expecting something like 'YYYY-MM-DD'. Validation failed.`);
+    };
+    if (chekBirthday) {
+      return new Error(`Дата рождения еще не наступила`);
+    }
+    return null;
+  },
+}
+
+Profile.defaultProps = {
+  img: 'https://github.com/netology-code/ra-homeworks/blob/master/typechecking/profile-validation/images/profile.jpg?raw=true',
+}
