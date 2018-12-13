@@ -1,27 +1,24 @@
 class Cart extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
-      isOpen: props.isOpen,
-      items: props.items
+      update: false,
     }
   }
 
-  componentWillReceiveProps({isOpen, items}) {
+  componentWillReceiveProps ({items, isOpen}) {
     this.setState({
-      isOpen,
-      items
-    });
+      update: this.props.isOpen !== isOpen || isOpen && this.props.items.length !== items.length
+    })
   }
 
-  shouldComponentUpdate(nextProps) {
-    return this.state.isOpen !== nextProps.isOpen || (this.state.isOpen && this.state.items.length !== nextProps.items.length);
+  shouldComponentUpdate (nextProps, nextState) {
+    return this.props.isOpen || nextState.update
   }
 
-  render() {
+  render () {
     return (
       <CartView {...this.props} />
-    );
+    )
   }
-
 }
